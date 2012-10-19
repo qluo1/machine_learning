@@ -23,20 +23,24 @@ for epsilon = min(pval):stepsize:max(pval)
     % Note: You can use predictions = (pval < epsilon) to get a binary vector
     %       of 0's and 1's of the outlier predictions
 
+    predictions = pval < epsilon;
+    
+    % true positive, both prediction and actual match on anomaly
+    tp = sum ((predictions ==1) & (yval == 1)) ;
+    % false positive, predict as anomally, actuall not
+    fp = sum((predictions == 1) & (yval == 0));
+    % false negative, predict as normal, actuall is
+    fn = sum( (predictions == 0) & (yval== 1)) ; 
 
-
-
-
-
-
-
-
-
-
-
-
+    % precision 
+    prec = tp/(tp + fp);
+    
+    % recall
+    rec = tp /(tp + fn);
+    
     % =============================================================
 
+    F1 = 2 * prec * rec / (prec + rec);
     if F1 > bestF1
        bestF1 = F1;
        bestEpsilon = epsilon;
