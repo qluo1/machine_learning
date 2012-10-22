@@ -42,20 +42,21 @@ Theta_grad = zeros(size(Theta));
 assert(size(X) == [num_movies,num_features]);
 assert(size(Theta) == [num_users, num_features]);
 
-for i = 1:num_movies
-    xi = X(i,:);
-    for j = 1:num_users
-        thetaj = Theta(j,:);
-        if (R(i,j) == 1)
-            J = J + (thetaj * xi' - Y(i,j)) ^ 2;
-        end
-    end
-end
+%for i = 1:num_movies
+%    xi = X(i,:);
+%    for j = 1:num_users
+%        thetaj = Theta(j,:);
+%        if (R(i,j) == 1)
+%            J = J + (thetaj * xi' - Y(i,j)) ^ 2;
+%        end
+%    end
+%end
 %
 %
-J = 1/ 2 * J;
+%J = 1/ 2 * J;
 
 %J = sum(((Theta * X')' - Y)(R) .^ 2)/2;
+J = sum(sum(((Theta * X')' - Y) .^2 .* R))/2;
 
 for i = 1:num_movies
     xi = X(i,:);
