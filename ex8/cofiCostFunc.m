@@ -60,22 +60,28 @@ J = sum(sum(((Theta * X')' - Y) .^2 .* R))/2;
 
 for i = 1:num_movies
     xi = X(i,:);
-    for j = 1:num_users
-        thetaj = Theta(j,:);
-        if (R(i,j) == 1)
-            X_grad(i,:) = X_grad(i,:) + (thetaj * xi' - Y(i,j)) * Theta(j,:);
-        end
-    end
+    
+    X_grad(i,:) = ((Theta * xi' - Y(i,:)').* (R(i,:)'))' * Theta;
+%    for j = 1:num_users
+%        thetaj = Theta(j,:);
+%        if (R(i,j) == 1)
+%            X_grad(i,:) = X_grad(i,:) + (thetaj * xi' - Y(i,j)) * Theta(j,:);
+%        end
+%    end
 end
+
+
 
 for j = 1:num_users
     betaj = Theta(j,:);
-    for i = 1: num_movies
-        xi = X(i,:);
-        if (R(i,j) == 1)
-            Theta_grad(j,:) = Theta_grad(j,:) + (betaj * xi' - Y(i,j)) * X(i,:);
-        end
-    end
+    
+    Theta_grad(j,:) =  ((X * betaj' - Y(:,j)) .* R(:,j))' * X;
+%    for i = 1: num_movies
+%        xi = X(i,:);
+%        if (R(i,j) == 1)
+%            Theta_grad(j,:) = Theta_grad(j,:) + (betaj * xi' - Y(i,j)) * X(i,:);
+%        end
+%    end
 end
 
 % =============================================================
