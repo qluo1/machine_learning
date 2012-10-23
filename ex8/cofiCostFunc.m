@@ -55,13 +55,21 @@ assert(size(Theta) == [num_users, num_features]);
 %
 %J = 1/ 2 * J;
 
+% not quite right version
 %J = sum(((Theta * X')' - Y)(R) .^ 2)/2;
-J = sum(sum(((Theta * X')' - Y) .^2 .* R))/2;
+
+%J = sum(sum(((Theta * X')' - Y) .^2 .* R))/2;
+
+% regulized
+J = sum(sum(((Theta * X')' - Y) .^2 .* R))/2 + lambda/2 * sum(sum(Theta .^ 2)) + lambda/2 * sum(sum(X.^2));
 
 for i = 1:num_movies
     xi = X(i,:);
     
-    X_grad(i,:) = ((Theta * xi' - Y(i,:)').* (R(i,:)'))' * Theta;
+    %X_grad(i,:) = ((Theta * xi' - Y(i,:)').* (R(i,:)'))' * Theta;
+    
+    % regualized version
+    X_grad(i,:) = ((Theta * xi' - Y(i,:)').* (R(i,:)'))' * Theta + lambda * xi;
 %    for j = 1:num_users
 %        thetaj = Theta(j,:);
 %        if (R(i,j) == 1)
@@ -75,7 +83,10 @@ end
 for j = 1:num_users
     betaj = Theta(j,:);
     
-    Theta_grad(j,:) =  ((X * betaj' - Y(:,j)) .* R(:,j))' * X;
+    %Theta_grad(j,:) =  ((X * betaj' - Y(:,j)) .* R(:,j))' * X;
+    
+    % regualized version
+    Theta_grad(j,:) =  ((X * betaj' - Y(:,j)) .* R(:,j))' * X + lambda * betaj;
 %    for i = 1: num_movies
 %        xi = X(i,:);
 %        if (R(i,j) == 1)
