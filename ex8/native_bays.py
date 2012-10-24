@@ -23,4 +23,4 @@ gnd = GaussianNB()
 pred = gnd.fit(Xval,yval)
 y_exp = pred.predict(X)
 
-X[y_exp == 1,]
+print X[y_exp == 1,]
