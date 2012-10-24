@@ -55,13 +55,19 @@ assert(size(Theta) == [num_users, num_features]);
 %
 %J = 1/ 2 * J;
 
-% not quite right version
-%J = sum(((Theta * X')' - Y)(R) .^ 2)/2;
+% right version is R == 1 
+% J = sum(((Theta * X')' - Y)(R==1) .^ 2)/2;
 
 %J = sum(sum(((Theta * X')' - Y) .^2 .* R))/2;
 
 % regulized
-J = sum(sum(((Theta * X')' - Y) .^2 .* R))/2 + lambda/2 * sum(sum(Theta .^ 2)) + lambda/2 * sum(sum(X.^2));
+%J = sum(sum(((Theta * X')' - Y) .^2 .* R))/2 + lambda/2 * sum(sum(Theta .^ 2)) + lambda/2 * sum(sum(X.^2));
+
+% 1st
+%J = sum(sum(((Theta * X')' - Y) .^2 .* R))/2 + lambda/2 * sum(sum(Theta .^ 2)) + lambda/2 * sum(sum(X.^2));
+
+% 2nd option
+J = sum(sum(((Theta * X')' - Y)(R==1) .^2 ))/2 + lambda/2 * sum(sum(Theta .^ 2)) + lambda/2 * sum(sum(X.^2));
 
 for i = 1:num_movies
     xi = X(i,:);
